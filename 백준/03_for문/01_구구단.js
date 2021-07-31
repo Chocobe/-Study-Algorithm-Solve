@@ -10,24 +10,15 @@ let input = [];
 
 rl
   .on('line', function (line) {
-    input.push(Number(line))
+    input.push(Number(line));
   })
   .on('close', function () {
     printMulTable();
-  process.exit();
+    process.exit();
 });
 
-function getData() {
-  const fs = require("fs");
-  return Number(fs.readFileSync("./dev/stdio"));
-}
-
 function printMulTable() {
-  const input = getData();
-
   for(let i = 1; i < 10; i++) {
     console.log(`${input} * ${i} = ${input * i}`);
   }
 }
-
-printMulTable();
