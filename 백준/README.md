@@ -24,7 +24,7 @@ console.log("파일 내용: ", fileData);
 <br/><br/>
 
 
-## ``readline``을 이용한 파일을 ``EOL``단위로 일기
+## ``readline``을 이용한 파일을 ``EOL``단위로 읽기
 
 ``readline``을 사용하면, 파일내용을 ``Line (줄)``단위로 읽을 수 있습니다.
 
