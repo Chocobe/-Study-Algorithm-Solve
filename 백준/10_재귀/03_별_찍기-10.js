@@ -6,70 +6,151 @@
  *    * 크기 3의 패턴은 가운데에 공백이 있고, 가운데를 제외한 모든 칸에 별이 하나씩 있는 패턴이다.
  */
 
-function star(n) {
-  const result = Array.from({ length: n }, () => Array.from({ length: n }, () => ""));
-  recursion(0, 0, n, false);
-  console.log("원본: ", result);
+/*
+***************************
+* ** ** ** ** ** ** ** ** *
+***************************
+***   ******   ******   ***
+* *   * ** *   * ** *   * *
+***   ******   ******   ***
+***************************
+* ** ** ** ** ** ** ** ** *
+***************************
+*********         *********
+* ** ** *         * ** ** *
+*********         *********
+***   ***         ***   ***
+* *   * *         * *   * *
+***   ***         ***   ***
+*********         *********
+* ** ** *         * ** ** *
+*********         *********
+***************************
+* ** ** ** ** ** ** ** ** *
+***************************
+***   ******   ******   ***
+* *   * ** *   * ** *   * *
+***   ******   ******   ***
+***************************
+* ** ** ** ** ** ** ** ** *
+***************************
+*/
 
+const fs = require("fs");
+const readline = require("readline");
+
+let testCase;
+
+const rl = readline.createInterface({
+  input: fs.createReadStream("./dev/stdin"),
+  output: undefined,
+});
+
+rl
+  .on("line", line => {
+    initData(line);
+  })
+  .on("close", () => {
+    console.log(solution(testCase));
+  })
+
+function initData(line) {
+  testCase = Number(line.toString().trim());
+}
+
+function solution(n) {
+  const result = Array.from({ length: n }, () => Array.from({ length: n }, () => "*"));
+  recursion(n, 0, 0);
   return result.map(row => row.join("")).join("\n");
 
-  function recursion(startRow, startCol, size, isBlank) {
-    if(isBlank) {
-      for(let row = startRow; row < startRow + size; row++) {
-        for(let col = startCol; col < startCol + size; col++) {
-          result[row][col] = " ";
-        }
-      }
-
-      return;
-    }
-
-    if(size === 3) {
-      // console.log("size: 3일 때, ", `(${startRow}, ${startCol})`);
-      
-      for(let i = 0; i < 3; i++) {
-        for(let j = 0; j < 3; j++) {
-          const row = startRow + i;
-          const col = startCol + j;
-
-          if(i === 1 && j === 1) {
-            result[row][col] = " ";
-          } else {
-            result[row][col] = "*";
-          }
-        }
-      }
-
-      return;
-    }
-
-    const nextSize = size / 3;
+  function recursion(size, startRow, startCol) {
+    if(size < 3) return;
     
-    for(let i = 0; i < 3; i++) {
-      for(let j = 0; j < 3; j++) {
-        const nextRow = i * nextSize;
-        const nextCol = j * nextSize;
-        
-        if(i === 1 && j === 1) {
-          // console.log("공백 (nextRow, nextCol): ", `(${nextRow}, ${nextCol})`);
-          recursion(nextRow, nextCol, nextSize, true);
-        } else {
-          recursion(nextRow, nextCol, nextSize, false);
-        }
+    const subSize = size / 3;
+    const blankRowStart = startRow + subSize;
+    const blankColStart = startCol + subSize;
+    const blankRowLimit = startRow + subSize * 2;
+    const blankColLimit = startCol + subSize * 2;
 
-        // console.log("(nextRow, nextCol): ", `(${nextRow}, ${nextCol})`);
+    // 공백처리
+    for(let row = blankRowStart; row < blankRowLimit; row++) {
+      for(let col = blankColStart; col < blankColLimit; col++) {
+        result[row][col] = " ";
+      }
+    }
+
+    // 세부요소 처리
+    for(let row = 0; row < 3; row++) {
+      for(let col = 0 ; col < 3; col++) {
+        const nextRow = startRow + subSize * row;
+        const nextCol = startCol + subSize * col;
+
+        recursion(subSize, nextRow, nextCol);
       }
     }
   }
 }
 
-const assert = require("assert");
+// const assert = require("assert");
 
-describe("03_별_찍기.js", () => {
-  const mock = "***\n* *\n***";
+// describe("03_별_찍기", () => {
+//   const mock3 = [
+//     "***",
+//     "* *",
+//     "***",
+//   ].join("\n");
 
-  it("star(3)", () => {
-    const r = star(27);
-    console.log(r);
-  });
-});
+//   const mock9 = [
+//     "*********",
+//     "* ** ** *",
+//     "*********",
+//     "***   ***",
+//     "* *   * *",
+//     "***   ***",
+//     "*********",
+//     "* ** ** *",
+//     "*********",
+//   ].join("\n");
+
+//   const mock27 = [
+//     "***************************",
+//     "* ** ** ** ** ** ** ** ** *",
+//     "***************************",
+//     "***   ******   ******   ***",
+//     "* *   * ** *   * ** *   * *",
+//     "***   ******   ******   ***",
+//     "***************************",
+//     "* ** ** ** ** ** ** ** ** *",
+//     "***************************",
+//     "*********         *********",
+//     "* ** ** *         * ** ** *",
+//     "*********         *********",
+//     "***   ***         ***   ***",
+//     "* *   * *         * *   * *",
+//     "***   ***         ***   ***",
+//     "*********         *********",
+//     "* ** ** *         * ** ** *",
+//     "*********         *********",
+//     "***************************",
+//     "* ** ** ** ** ** ** ** ** *",
+//     "***************************",
+//     "***   ******   ******   ***",
+//     "* *   * ** *   * ** *   * *",
+//     "***   ******   ******   ***",
+//     "***************************",
+//     "* ** ** ** ** ** ** ** ** *",
+//     "***************************",
+//   ].join("\n");
+
+//   it("solution(3)", () => {
+//     assert(solution(3) === mock3);
+//   });
+
+//   it("solution(9)", () => {
+//     assert(solution(9) === mock9);
+//   });
+
+//   it("solution(27)", () => {
+//     assert(solution(27) === mock27);
+//   });
+// });
