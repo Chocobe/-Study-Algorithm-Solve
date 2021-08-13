@@ -27,7 +27,7 @@ rl
     initTestCase(line);
   })
   .on("close", () => {
-    hanoi(testCase);
+    console.log(hanoi(testCase));
   });
 
 function initTestCase(line) {
@@ -36,10 +36,7 @@ function initTestCase(line) {
 
 function hanoi(n) {
   let history = [];
-
   recursion(n, 1, 3);
-
-  console.log(history.length.toString().concat("\n", history.join("\n")));
   return history.length.toString().concat("\n", history.join("\n"));
   
   function recursion(block, start, end) {
@@ -55,7 +52,7 @@ function hanoi(n) {
   }
 }
 
-const assert = require("assert");
+// const assert = require("assert");
 
 // describe("04_하노이_탑_이동_순서", () => {
 //   const mock1 = "1\n1 3";
